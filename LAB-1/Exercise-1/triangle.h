@@ -26,7 +26,7 @@ public:
 	}
 	void show(const char* name)
 	{
-		cout << "Sides of the triangle: " << name << endl;
+		cout << " Sides of the triangle: " << name << endl;
 		cout << "a = " << a << " b = " << b << " c = " << c;
 	}
 
