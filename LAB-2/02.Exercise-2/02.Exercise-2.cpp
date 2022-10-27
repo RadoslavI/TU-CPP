@@ -51,7 +51,7 @@ int main()
 	else cout << "Car is faster.\n";
 
 	cout << "\n Time needed for the entered km for the car:\n";
-	cout << timeNeeded(c1speed, )
+	cout << timeNeeded
 	cout << "\n Time needed for the entered km for the truck:\n";
 
 	return 0;
