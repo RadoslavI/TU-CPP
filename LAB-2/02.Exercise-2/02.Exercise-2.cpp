@@ -5,20 +5,20 @@ using namespace std;
 
 class truck; //Предварителна декларация
 class car {
-public:
 	int passengers;
 	int speed;
+public:
 	car(int p, int s) { passengers = p; speed = s; }
 	friend int sp_greater(car c, truck t);
-	friend double timeNeeded(int speed, int km);
+	friend double timeNeeded(double km, int type, car c, truck t);
 };
 class truck {
-public:
 	int weight;
 	int speed;
+public:
 	truck(int w, int s) { weight = w; speed = s; }
 	friend int sp_greater(car c, truck t);
-	friend double timeNeeded(int speed, int km);
+	friend double timeNeeded(double km, int type, car c, truck t);
 };
 
 /* Връща положителна стойност, ако скоростта на колата е по-голяма от
@@ -30,10 +30,24 @@ int sp_greater(car c, truck t)
 	return c.speed - t.speed;
 }
 
-double timeNeeded(int speed, int km) 
-{
-	return static_cast<double>(km) / speed;
+double timeNeeded(double km, int type, car c, truck t) {
+	if (type == 1) 
+	{
+		return km / c.speed;
+	}
+
+	else if (type == 2) 
+	{
+		return km / t.speed;
+	}
+
+	else 
+	{
+		cout << "Wrong vehicle type!" << endl;
+		return 0;
+	}
 }
+
 int main()
 {
 	int t;
@@ -57,9 +71,9 @@ int main()
 	std::cout << std::setprecision(2);
 
 	cout << "\n Time needed for the entered km for car 2:\n";
-	cout << timeNeeded(c2.speed, 50) << " hours";
+	cout << timeNeeded(50.00, 1, c2, t2) << " hours";
 	cout << "\n Time needed for the entered km for truck 2:\n";
-	cout << timeNeeded(t2.speed, 50) << " hours";
+	cout << timeNeeded(50, 2, c2, t2) << " hours";
 
 
 	return 0;
