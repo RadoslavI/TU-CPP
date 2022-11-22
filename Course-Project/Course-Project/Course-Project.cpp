@@ -1,28 +1,38 @@
 #include <iostream>
 #include <fstream>
-#include "Course-Project.h"
 #include <list>
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <iomanip>
+
 using namespace std;
 
 class electoralDistrict {
-	string* name = new string();
+	char *name;
 	int electorsCount;
 	int partiesCount;
-	map<string, int> votes;
 public:
-	electoralDistrict(string* _name, int _electorsCount,
+	map<string, int> votes;
+
+	electoralDistrict(char *_name, int _electorsCount,
 		int _partiesCount, map<string, int> _votes)
 	{
-		name = _name;
+		int sizeOfText = strlen(_name) + 1;
+
+		// Dynamically allocate the correct amount of memory.
+		name = new char[sizeOfText];
+
+		// If the allocation succeeds, copy the initialization string.
+		if (name)
+			strcpy_s(name, sizeOfText, _name);
+
 		electorsCount = _electorsCount;
 		partiesCount = _partiesCount;
 		votes = _votes;
 	};
 
-	string* getName() {
+	char* getName() {
 		return name;
 	}
 
@@ -32,10 +42,6 @@ public:
 
 	int getpartiesCount() {
 		return partiesCount;
-	}
-
-	map<string, int> getVotes() {
-		return votes;
 	}
 };
 
@@ -50,7 +56,7 @@ void print(vector<electoralDistrict> g1)
 {
 	//cout << "\nVector elements are: ";
 	for (auto it = g1.begin(); it != g1.end(); it++)
-		cout << *it->getName() << "\n";
+		cout << it->getName() << "\n";
 }
 
 void writeFile(vector<electoralDistrict> g1)
@@ -64,45 +70,6 @@ void writeFile(vector<electoralDistrict> g1)
 	}
 }
 
-vector<electoralDistrict> seedData()
-{
-	vector<electoralDistrict> dataSet;
-
-	map<string, int> seedVotes;
-
-	seedVotes.insert(pair<string, int>("Gerb", 10));
-	seedVotes.insert(pair<string, int>("pp", 5));
-	seedVotes.insert(pair<string, int>("db", 10));
-
-	electoralDistrict ed1((string*) "Studentski grad", 100, 3, seedVotes);
-	
-	seedVotes.clear();
-
-	seedVotes.insert(pair<string, int>("Gerb", 10));
-	seedVotes.insert(pair<string, int>("pp", 30));
-	seedVotes.insert(pair<string, int>("db", 0));
-	seedVotes.insert(pair<string, int>("Vuzr", 100));
-	seedVotes.insert(pair<string, int>("zeleni", 50));
-
-	electoralDistrict ed2((string*) "Luilin", 250, 5, seedVotes);
-	
-	seedVotes.clear();
-
-	seedVotes.insert(pair<string, int>("Gerb", 40));
-	seedVotes.insert(pair<string, int>("pp", 10));
-	seedVotes.insert(pair<string, int>("db", 5));
-	seedVotes.insert(pair<string, int>("Vuzr", 0));
-	seedVotes.insert(pair<string, int>("zeleni", 0));
-
-	electoralDistrict ed3((string*)"Krasno selo", 60, 5, seedVotes);
-
-	dataSet.insert(dataSet.begin(), ed1);
-	dataSet.insert(dataSet.end(), ed2);
-	dataSet.insert(dataSet.end(), ed3);
-
-	return dataSet;
-}
-
 void printResults(vector<electoralDistrict> g1)
 {
 	cout << "Voting results for all of the districts: \n";
@@ -111,8 +78,8 @@ void printResults(vector<electoralDistrict> g1)
 
 	for (auto it = g1.begin(); it != g1.end(); it++) {
 		
-		cout << *it->getName() << ": \n";
-		for (auto p = it->getVotes().begin(); p != it->getVotes().end(); p++) {
+		cout << it->getName() << ": \n";
+		for (auto p = it->votes.begin(); p != it->votes.end(); p++) {
 			int currVotes = p->second;
 			int electors = it->getElectorsCount();
 			double result = (currVotes / (double) electors);
@@ -122,56 +89,154 @@ void printResults(vector<electoralDistrict> g1)
 	}
 }
 
+int findEntryWithLargestValue(
+	map<string, int> sampleMap)
+{
+
+	// Reference variable to help find
+	// the entry with the highest value
+	int entryWithMaxValue
+		= 0;
+
+	// Iterate in the map to find the required entry
+	map<string, int>::iterator currentEntry;
+	for (currentEntry = sampleMap.begin();
+		currentEntry != sampleMap.end();
+		++currentEntry) {
+
+		// If this entry's value is more
+		// than the max value
+		// Set this entry as the max
+		if (currentEntry->second
+	> entryWithMaxValue) {
+
+			entryWithMaxValue = currentEntry->second;
+		}
+	}
+
+	return entryWithMaxValue;
+}
+
+void printNoWinnerReg(vector<electoralDistrict> g1, int operation)
+{
+	cout << "Districts with no winners: \n";
+
+	for (auto it = g1.begin(); it != g1.end(); it++) {
+		int maxVotes = findEntryWithLargestValue(it->votes);
+		int numberOfMax = 0;
+		int totalVotes = 0;
+
+		for (auto p = it->votes.begin(); p != it->votes.end(); p++)
+		{
+			int currVotes = p->second;
+			totalVotes += currVotes;
+			if (currVotes == maxVotes) {
+				numberOfMax++;
+			}
+		}
+
+		if (numberOfMax != 1) {
+
+			if (operation != 1)
+			{
+				cout << it->getName() << endl;
+			}
+
+			else if (operation == 1) 
+			{
+				ofstream myfile("NoWinnersList.txt", ios::app);
+				if (myfile.is_open())
+				{
+					
+					double value = (it->getElectorsCount() - totalVotes) 
+						/ (double)it->getElectorsCount();
+					
+					cout << it->getName() << " - " << value << "%" << endl;
+
+					myfile << std::fixed;
+					myfile << std::setprecision(2);
+					myfile << it->getName() << " - " << value << "%" << endl;
+					myfile.close();
+				}
+			}
+			cout << "==============================" << endl;
+		}
+	}
+}
+
+
 int main() 
 {
+	cout << std::fixed;
+	cout << std::setprecision(2);
+
 	vector<electoralDistrict> dataSet;
 
-	int operation;
-	cout << "Please select operation: " << endl;
-	cin >> operation;
+	map<string, int> seedVotes;
+
+	seedVotes.insert(pair<string, int>("Gerb", 10));
+	seedVotes.insert(pair<string, int>("pp", 5));
+	seedVotes.insert(pair<string, int>("db", 10));
+
+	electoralDistrict ed1((char*) "Studentski grad", 100, 3, seedVotes);
+
+	seedVotes.clear();
+
+	seedVotes.insert(pair<string, int>("Gerb", 10));
+	seedVotes.insert(pair<string, int>("pp", 30));
+	seedVotes.insert(pair<string, int>("db", 0));
+	seedVotes.insert(pair<string, int>("Vuzr", 100));
+	seedVotes.insert(pair<string, int>("zeleni", 50));
+
+	electoralDistrict ed2((char*) "Luilin", 250, 5, seedVotes);
+
+	seedVotes.clear();
+
+	seedVotes.insert(pair<string, int>("Gerb", 25));
+	seedVotes.insert(pair<string, int>("pp", 25));
+	seedVotes.insert(pair<string, int>("db", 5));
+	seedVotes.insert(pair<string, int>("Vuzr", 0));
+	seedVotes.insert(pair<string, int>("zeleni", 0));
+
+	electoralDistrict ed3((char*) "Krasno selo", 60, 5, seedVotes);
+
+	dataSet.insert(dataSet.begin(), ed1);
+	dataSet.insert(dataSet.end(), ed2);
+	dataSet.insert(dataSet.end(), ed3);
+
+	int operation = -1;
 
 	while (operation != 0) 
 	{
-		cout << "1) - Seed data" << endl;
-		cout << "2) - Create file from objects" << endl;
-		cout << "3) - Print vote percentage per region" << endl;
-		cout << "4) - Print regions with no winner" << endl;
-		cout << "5) - Create a file with the regions with no winner" << endl;
+		cout << "Please select an operation: " << endl;
+		cout << "1) - Create file from objects" << endl;
+		cout << "2) - Print vote percentage per region" << endl;
+		cout << "3) - Print regions with no winner" << endl;
+		cout << "4) - Create a file with the regions with no winner" << endl;
 		cout << "0) - Exit" << endl;
 		cin >> operation;
 
 		if (operation == 1)
 		{
-			dataSet = seedData();
+			writeFile(dataSet);
+			cout << "Operation successfull" << endl;
 		}
 		else if (operation == 2) 
 		{
-			writeFile(dataSet);
+			printResults(dataSet);
+			cout << "Operation successfull" << endl;
 		}
 		else if (operation == 3) 
 		{
-			printResults(dataSet);
+			printNoWinnerReg(dataSet, 0);
+			cout << "Operation successfull" << endl;
 		}
 		else if (operation == 4) 
 		{
-
-		}
-		else if (operation == 5) 
-		{
-
+			printNoWinnerReg(dataSet, 1);
+			cout << "Operation successfull" << endl;
 		}
 	}
-	
-
-
-	
-	//Reading data from Districts.txt
-	/*ifstream file2;
-	file2.open("Districts.txt", ios::in);
-	file2.seekg(0);
-	file2.read((char*)&ed1, sizeof(ed1));*/
-	
-	//file2.close();
 
 	return 0;
 }
