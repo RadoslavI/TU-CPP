@@ -29,7 +29,7 @@ public:
 	{
 		for (int i = 0; i < input.size(); i++)
 		{
-			int sizeOfText = sizeof(input[i]) + 1;
+			int sizeOfText = strlen(input[i]) + 1;
 
 			// Dynamically allocate the correct amount of memory.
 			titles[i] = new char[sizeOfText];
