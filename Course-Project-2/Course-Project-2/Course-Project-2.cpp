@@ -16,37 +16,49 @@
 using namespace std;
 
 class Library {
-	int booksCount;
-	char* titles[100];
+	int titlesCount;
+	
 public:
-	Library(int _booksCount)
+	char* titles[100];
+	Library(int _titlesCount, char* _titles[])
 	{
-		booksCount = _booksCount;
-		titles[1] = (char*) "default";
-	};
+		titlesCount = _titlesCount;
 
-	void addTitles(vector<char*> input)
-	{
-		for (int i = 0; i < input.size(); i++)
+		for (int i = 0; i < titlesCount; i++)
 		{
-			int sizeOfText = strlen(input[i]) + 1;
+			int sizeOfText = strlen(_titles[i]) + 1;
 
 			// Dynamically allocate the correct amount of memory.
 			titles[i] = new char[sizeOfText];
 
 			// If the allocation succeeds, copy the initialization string.
 			if (titles[i])
-				titles[i] = input[i];
+				titles[i] = _titles[i];
 		};
-	}
+	};
 
-	vector<char> getTitles()
+	//void addTitles(vector<char*> input)
+	//{
+	//	for (int i = 0; i < input.size(); i++)
+	//	{
+	//		int sizeOfText = strlen(input[i]) + 1;
+
+	//		// Dynamically allocate the correct amount of memory.
+	//		titles[i] = new char[sizeOfText];
+
+	//		// If the allocation succeeds, copy the initialization string.
+	//		if (titles[i])
+	//			titles[i] = input[i];
+	//	};
+	//}
+
+	vector<string> getTitles()
 	{
-		vector<char> output;
+		vector<string> output;
 
-		for (int i = 0; i < booksCount; i++) 
+		for (int i = 0; i < titlesCount; i++)
 		{
-			output[i] = *titles[i];
+			output.insert(output.end(), (string)titles[i]);
 		}
 
 		return output;
@@ -59,7 +71,7 @@ class Information : public Library
 	vector<string> authorNames;
 	string rentDate;
 public: 
-	Information(bool iA, vector<string> aN, string rD, int bC) : Library(bC)
+	Information(bool iA, vector<string> aN, string rD, int bC, char* t[]) : Library(bC, t)
 	{
 		isAvailable = iA;
 		authorNames = aN;
@@ -114,20 +126,23 @@ bool mycomp(string a, string b) {
 
 void availabilityInfo(vector<Information> books)
 {
+	//vector<Information> currBooks = *books;
+
 	for (int i = 0; i < books.size(); i++)
 	{
 		Information currBook = books[i];
 		if (currBook.getIsAvailable())
 		{
-			sort(currBook.getAuthorNames().begin(), currBook.getAuthorNames().end(), mycomp);
+			vector<string> currAuthorNames = currBook.getAuthorNames();
+			sort(currAuthorNames.begin(), currAuthorNames.end(), mycomp);
 
 			cout << "Information about the book: " << endl;
-			cout << currBook.getIsAvailable() << '/' << currBook.getRentDate() << endl;
+			cout << "Availability: " << currBook.getIsAvailable() << '/' << currBook.getRentDate() << endl;
 			cout << "Authors: " << endl;
 
-			for (int n = 0; n < currBook.getAuthorNames().size(); n++)
+			for (int n = 0; n < currAuthorNames.size(); n++)
 			{
-				cout << currBook.getAuthorNames()[n] << endl;
+				cout << currAuthorNames[n] << endl;
 			}
 		}
 	}
@@ -140,9 +155,11 @@ void getBooksOnDate(vector<Information> books, string date)
 		Information currBook = books[i];
 		if (currBook.getRentDate() == date)
 		{
-			for (int n = 0; n < currBook.getAuthorNames().size(); n++)
+			vector<string> currAuthorNames = currBook.getAuthorNames();
+			
+			for (int n = 0; n < currAuthorNames.size(); n++)
 			{
-				cout << currBook.getTitles()[n] << endl;
+				cout << currBook.titles[n] << endl;
 			}
 		}
 	}
@@ -153,7 +170,9 @@ void writeInFileWithMoreAuthors(vector<Information> books)
 	for (int i = 0; i < books.size(); i++)
 	{
 		Information currBook = books[i];
-		if (currBook.getAuthorNames().size() > 1)
+		vector<string> currAuthorNames = currBook.getAuthorNames();
+
+		if (currAuthorNames.size() > 1)
 		{
 			cout << currBook;
 		}
@@ -168,21 +187,19 @@ int main()
 	vector<string> authors2 = { "Ivan Vazov" };
 	vector<string> authors3 = { "Toshko", "Nikola" };
 
-	vector<char *> titles1 = { (char*) "Igra na glada", (char*) "Mecho puh" };
-	vector<char *> titles2(1);
-	titles2.insert(titles2.begin(), (char*) "Pod Igoto");
-	vector<char *> titles3 = { (char*) "Sukrovishteto", (char*) "Learn C++ for beginers" };
+	char* titles1[] = { (char*)"Igra na glada", (char*)"Mecho puh" };
+	char* titles2[] = { (char*)"Pod Igoto"};
+	char* titles3[] = { (char*) "Sukrovishteto", (char*) "Learn C++ for beginers" };
 
-	Information book1(true, authors1, "10.10.2022", 2);
-	book1.addTitles(titles1);
-	Information book2(true, authors2, "12.10.2022", 1);
-	book2.addTitles(titles2);
-	Information book3(true, authors3, "10.10.2022", 2);
-	book3.addTitles(titles3);
+	Information book1(true, authors1, "10.10.2022", 2, titles1);
+	Information book2(true, authors2, "12.10.2022", 1, titles2);
+	Information book3(true, authors3, "10.10.2022", 2, titles3);
 	
 	books.insert(books.begin(), book1);
 	books.insert(books.end(), book2);
 	books.insert(books.end(), book3);
+
+	vector<Information>* pBooks = &books;
 
 	availabilityInfo(books);
 
