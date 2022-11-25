@@ -37,21 +37,6 @@ public:
 		};
 	};
 
-	//void addTitles(vector<char*> input)
-	//{
-	//	for (int i = 0; i < input.size(); i++)
-	//	{
-	//		int sizeOfText = strlen(input[i]) + 1;
-
-	//		// Dynamically allocate the correct amount of memory.
-	//		titles[i] = new char[sizeOfText];
-
-	//		// If the allocation succeeds, copy the initialization string.
-	//		if (titles[i])
-	//			titles[i] = input[i];
-	//	};
-	//}
-
 	vector<string> getTitles()
 	{
 		vector<string> output;
@@ -198,8 +183,6 @@ int main()
 	books.insert(books.begin(), book1);
 	books.insert(books.end(), book2);
 	books.insert(books.end(), book3);
-
-	vector<Information>* pBooks = &books;
 
 	availabilityInfo(books);
 
