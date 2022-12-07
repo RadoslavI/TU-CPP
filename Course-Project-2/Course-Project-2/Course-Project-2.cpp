@@ -16,10 +16,9 @@
 using namespace std;
 
 class Library {
-	int titlesCount;
-	
 public:
 	char* titles[100];
+	int titlesCount;
 	Library(int _titlesCount, char* _titles[])
 	{
 		titlesCount = _titlesCount;
@@ -140,9 +139,7 @@ void getBooksOnDate(vector<Information> books, string date)
 		Information currBook = books[i];
 		if (currBook.getRentDate() == date)
 		{
-			vector<string> currAuthorNames = currBook.getAuthorNames();
-			
-			for (int n = 0; n < currAuthorNames.size(); n++)
+			for (int n = 0; n < currBook.titlesCount; n++)
 			{
 				cout << currBook.titles[n] << endl;
 			}
@@ -184,10 +181,13 @@ int main()
 	books.insert(books.end(), book2);
 	books.insert(books.end(), book3);
 
+	cout << "Calling avalibility info" << endl;
 	availabilityInfo(books);
 
+	cout << "Calling books on data" << endl;
 	getBooksOnDate(books, "10.10.2022");
 
+	cout << "Calling file writting" << endl;
 	writeInFileWithMoreAuthors(books);
 
 	return 0;
