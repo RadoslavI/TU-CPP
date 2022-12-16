@@ -1,0 +1,30 @@
+name1
+123
+1
+11
+2022
+{
+	bolest - cm
+	bolest1 - cm1
+	bolest2 - cm2
+}
+name2
+2345
+1
+12
+2022
+{
+	bolest - cm11
+	bolest1 - cm12
+	bolest2 - cm23
+}
+name3
+345
+1
+12
+2022
+{
+	bolest - cm3
+	bolest1 - cm13
+	bolest2 - cm23
+}
