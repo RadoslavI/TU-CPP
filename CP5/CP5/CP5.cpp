@@ -14,10 +14,12 @@ class Material {
 	double price;
 public:
 	Material() {
-
+		name = "default name";
+		price = 0.0;
 	}
 	Material(string n, double p) {
-
+		name = n;
+		price = p;
 	}
 	void setName(string n) {
 		name = n;
@@ -175,9 +177,12 @@ ostream& operator<<(ostream& os, const Distributor& d)
 		for (int i = 0; i < d.optics.size(); i++)
 		{
 			Optic currOptic = d.optics[i];
-			os << currOptic.getMaterial().getName() << endl;
-			myfile << currOptic.getMaterial().getName() << endl;
+			os << "|Type: " << currOptic.getType() << "| Material: " << currOptic.getMaterial().getName() << "| Price: " << currOptic.getMaterial().getPrice() << endl;
+			myfile << "|Type: " << currOptic.getType() << "| Material: " << currOptic.getMaterial().getName() << "| Price: " << currOptic.getMaterial().getPrice() << endl;
 		}
+
+		os << "====================================" << endl;
+		myfile << "====================================" << endl;
 
 		myfile.close();
 	}
@@ -198,6 +203,7 @@ int main()
 		cout << "1) - Create a Distributor" << endl;
 		cout << "2) - Create an Optic and add it to a destributor" << endl;
 		cout << "3) - Make an order" << endl;
+		cout << "4) - Print a distributor's info and save it in a file" << endl;
 		cout << "0) - Exit" << endl;
 		cin >> operation;
 
@@ -217,6 +223,7 @@ int main()
 			cout << "Enter phone number: " << endl;
 			cin >> currPhone;
 			Distributor currDestr(currBulstat, currName, currLocation, currPhone);
+			distributors.push_back(currDestr);
 			cout << "Operation successfull" << endl;
 		}
 		else if (operation == 2)
@@ -225,7 +232,7 @@ int main()
 			cout << "Enter destributor bulstat" << endl;
 			cin >> searchBulstat;
 
-			Distributor* currDistr = &distributors[0];
+			Distributor* currDistr = 0;
 			bool result = false;
 			for (int i = 0; i < distributors.size(); i++)
 			{
@@ -271,7 +278,7 @@ int main()
 			cout << "====================================" << endl;
 				for (size_t i = 0; i < distributors.size(); i++)
 				{
-					cout << "Distributor " << i + 1 << distributors[i].getName();
+					cout << "Distributor #" << i + 1 << " " << distributors[i].getName() << endl;
 				}
 			cout << "====================================" << endl;
 			cin >> searchDistrName;
@@ -292,8 +299,7 @@ int main()
 			if (result) {
 				double totalPrice = 0;
 				string searchOpticType;
-				int quantity = 0;
-				Optic* searchOptic = &distributors[0].getOptics()[0];
+				Optic* searchOptic = 0;
 				cout << "This distributor has these types of optics and prices: " << endl;
 				cout << "====================================" << endl;
 				bool result2 = false;
@@ -301,10 +307,11 @@ int main()
 				{
 					Optic currOptic = currDistr->getOptics()[i];
 					Material currMaterial = currOptic.getMaterial();
-					cout << currOptic.getType() << currMaterial.getPrice() << endl;
+					cout << currOptic.getType() << " that costs " << currMaterial.getPrice() << endl;
 				}
 				cout << "====================================" << endl;
 				while (command != 0) {
+					int quantity = 0;
 					cout << "Enter desired optic's type: " << endl;
 					cin >> searchOpticType;
 					for (int i = 0; i < currDistr->getOptics().size(); i++)
@@ -337,6 +344,31 @@ int main()
 				cout << "A distributor with the entered Name doesn't exist!" << endl;
 			}
 
+			cout << "Operation successfull" << endl;
+		}
+		else if (operation == 4)
+		{
+			string searchBulstat;
+			cout << "Enter desired distributor's Bulstat: " << endl;
+			cin >> searchBulstat;
+
+			Distributor currDistr;
+			bool result = false;
+			for (int i = 0; i < distributors.size(); i++)
+			{
+				string currBulstat = distributors[i].getBulstat();
+				if (currBulstat == searchBulstat) {
+					currDistr = distributors[i];
+					result = true;
+				}
+			}
+
+			if (result) {
+				cout << currDistr << endl;
+			}
+			else {
+				cout << "A distributor with the entered Bulstat doesn't exist!" << endl;
+			}
 			cout << "Operation successfull" << endl;
 		}
 	}

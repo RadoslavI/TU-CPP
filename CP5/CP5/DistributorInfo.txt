@@ -1,0 +1,31 @@
+Distributor info: 
+Bulstat: 123
+Name: asd
+Location: asd
+Phone number: 123123
+Delivers optics: 
+Distributor info: 
+Bulstat: 123
+Name: ivan
+Location: sofia
+Phone number: 878174008
+Delivers optics: 
+====================================
+metal
+plastic
+Distributor info: 
+Bulstat: 123
+Name: asdasd
+Location: sssddd
+Phone number: 23333222
+Delivers optics: 
+Type: normalMaterial: metal
+====================================
+Distributor info: 
+Bulstat: 123
+Name: asdasd
+Location: sofia
+Phone number: 100033
+Delivers optics: 
+Type: normal Material: plasticPrice: 120.45
+====================================
