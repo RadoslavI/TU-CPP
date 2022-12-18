@@ -29,3 +29,12 @@ Phone number: 100033
 Delivers optics: 
 Type: normal Material: plasticPrice: 120.45
 ====================================
+Distributor info: 
+Bulstat: 123321
+Name: ????
+Location: Sofia
+Phone number: 999999999
+Delivers optics: 
+|Type: Normal| Material: plastic| Price: 120
+|Type: expensive| Material: metal| Price: 200.5
+====================================
