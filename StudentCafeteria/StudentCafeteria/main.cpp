@@ -48,7 +48,6 @@ public:
         else
         {
             std::cout << "Balance cannot be a negative number!";
-
         }
     }
 };
@@ -138,9 +137,9 @@ public:
             priceForUser += markup;
         }
         else if (user.getGroup() == "Students") {
-            priceForUser -= discount;
+            priceForUser *= (100 - discount) / 100;
             if (priceForUser < 0)
-                priceForUser = 0;
+                priceForUser = food.getPrice();
         }
         return priceForUser;
     }
@@ -153,15 +152,17 @@ std::ostream& operator<<(std::ostream& os, const FoodBlock& fb)
     // Print out the users
     os << "Users: ";
     for (const auto& user : fb.users) {
-        os << user.getName() << " ";
-        os << user.getBalance() << " ";
+        os << user.getName() << " | $";
+        os << user.getBalance() << " | ";
+        os << user.getGroup() << std::endl;
     }
     os << std::endl;
 
     // Print out the menu
     os << "Menu: ";
     for (const auto& food : fb.menu) {
-        os << food.getName() << " ";
+        os << food.getName() << ": $";
+        os << food.getPrice() << std::endl;
     }
     os << std::endl;
 
@@ -170,18 +171,20 @@ std::ostream& operator<<(std::ostream& os, const FoodBlock& fb)
     os << "Markup: " << fb.markup << std::endl;
 
     // Write data to a file
-    std::ofstream file("foodblock.txt");
+    std::ofstream file("cafeteria.txt");
     if (file.is_open()) {
         file << "Users: ";
         for (const auto& user : fb.users) {
-            file << user.getName() << " ";
-            file << user.getBalance() << " ";
+            file << user.getName() << " | ";
+            file << user.getBalance() << " | ";
+            file << user.getGroup() << std::endl;
         }
         file << std::endl;
 
         file << "Menu: ";
         for (const auto& food : fb.menu) {
-            file << food.getName() << " ";
+            file << food.getName() << ": $";
+            file << food.getPrice() << std::endl;
         }
         file << std::endl;
 
@@ -206,7 +209,7 @@ int main()
 
     int choice;
     do {
-        std::cout << "\nFoodBlock Menu\n";
+        std::cout << "\Cafeteria Menu\n";
         std::cout << "1. Add User\n";
         std::cout << "2. Add Food\n";
         std::cout << "3. Print FoodBlock\n";
@@ -293,7 +296,8 @@ int main()
             std::cout << "Invalid choice! Please try again." << std::endl;
             break;
         }
-    } while (choice != 5);
+    } 
+    while (choice != 5);
 
     return 0;
 }

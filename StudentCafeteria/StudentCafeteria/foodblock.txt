@@ -1,4 +1,4 @@
-Users: asd 10 
-Menu: asdasd 
+Users: aaa | 3.5 | Students || 
+Menu: 
 Discount: 10
-Markup: 3
+Markup: 2
