@@ -50,11 +50,11 @@ public:
     }
 
     //Setter methods
-    void setManufacturer(string manufacturer) {
+    void setManufacturer(string const& manufacturer) {
         this->manufacturer = manufacturer;
     }
 
-    void setModel(string model) {
+    void setModel(string const& model) {
         this->model = model;
     }
 
@@ -138,7 +138,7 @@ private:
     double fuelCost;
 public:
     // Default constructor
-    Flight() : destination(), distance(), fuelConsumptionKM(),
+    Flight() : distance(), fuelConsumptionKM(),
         crewCost(), fuelCost() {}
 
     // Parameterized constructor
@@ -200,7 +200,7 @@ public:
         }
     }
 
-    double calculateMaxDistance(double tankCapacity) {
+    double calculateMaxDistance(double tankCapacity) const {
         return tankCapacity / this->fuelConsumptionKM;
     }
 };
@@ -211,7 +211,7 @@ std::ostream& operator<<(std::ostream& os, const Plane& p)
     os << "Plane ID: ";
     os << p.getId() << endl;
     os << "===============" << endl;
-    PlaneClass* pClass = p.getPlaneClass();
+    PlaneClass const* pClass = p.getPlaneClass();
 
     // Print out the plane class info
     os << "Class info: ";
@@ -222,7 +222,11 @@ std::ostream& operator<<(std::ostream& os, const Plane& p)
     os << "Seat capacity: " << pClass->getSeats() << endl;
     os << "Tank capacity: " << pClass->getTankCapacity() << endl;
 
+    return os;
+}
+void SavePlane(const Plane& p){
     // Write data to a file
+    PlaneClass const* pClass = p.getPlaneClass();
     std::ofstream file;
     file.open("plane.txt", std::ios_base::app);
     if (file.is_open()) {
@@ -241,8 +245,6 @@ std::ostream& operator<<(std::ostream& os, const Plane& p)
         //Close the file
         file.close();
     }
-
-    return os;
 }
 
 int main() {
@@ -280,7 +282,7 @@ int main() {
         case 1:
             cout << "List of planes:" << endl;
             for (Plane plane : planes) {
-                cout << plane.getId() << endl;
+                cout << plane << endl;
             }
             break;
         case 2: {
@@ -288,7 +290,6 @@ int main() {
             cout << "Enter plane ID: ";
             cin >> id;
             
-
             string manufacturer;
             string model;
             int seats;
@@ -312,7 +313,7 @@ int main() {
             auto currClass = PlaneClass(manufacturer, model, seats,
                 minRunwayLength, tankCapacity, averageSpeed);
             classes.push_back(currClass);
-            planes.emplace_back(Plane(id, &currClass));
+            planes.emplace_back(id, &currClass);
             cout << "Plane added successfully!" << endl;
             break;
         }
@@ -347,7 +348,9 @@ int main() {
             break;
         case 5: {
             string destination;
-            int distance, duration, minFuelRequired;
+            int distance;
+            int duration;
+            int minFuelRequired;
             cout << "Enter flight details:" << endl;
             cout << "Destination: ";
             cin >> destination;
@@ -399,6 +402,7 @@ int main() {
                 if (currFlight.calculateMaxDistance(plane.getPlaneClass()->getTankCapacity()) >= 
                     currFlight.getDistance()) {
                     cout << plane << endl;
+                    SavePlane(plane);
                 }
             }
             break;
