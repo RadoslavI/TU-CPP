@@ -13,21 +13,21 @@ protected:
     int year;
 
 public:
-    Media(string type_, string author_, string title_, int year_) :
+    Media(string const& type_, string const& author_, string const& title_, int year_) :
         type(type_), author(author_), title(title_), year(year_) {}
 
-    Media() {}
+    Media() = default;
 
-    string getType() { return type; }
-    void setType(string type_) { type = type_; }
+    string getType() const { return type; }
+    void setType(string const& type_) { type = type_; }
 
-    string getAuthor() { return author; }
-    void setAuthor(string author_) { author = author_; }
+    string getAuthor() const { return author; }
+    void setAuthor(string const& author_) { author = author_; }
 
-    string getTitle() { return title; }
-    void setTitle(string title_) { title = title_; }
+    string getTitle() const { return title; }
+    void setTitle(string const& title_) { title = title_; }
 
-    int getYear() { return year; }
+    int getYear() const { return year; }
     void setYear(int year_) { year = year_; }
 };
 
@@ -36,12 +36,12 @@ private:
     bool isAvailable;
 
 public:
-    Item(string type_, string author_, string title_, int year_, bool isAvailable_) :
+    Item(string const& type_, string const& author_, string const& title_, int year_, bool isAvailable_) :
         Media(type_, author_, title_, year_), isAvailable(isAvailable_) {}
 
-    Item() {}
+    Item() = default;
 
-    bool getIsAvailable() { return isAvailable; }
+    bool getIsAvailable() const { return isAvailable; }
     void setIsAvailable(bool isAvailable_) { isAvailable = isAvailable_; }
 
     friend ostream& operator<<(ostream& os, const Item& i) {
@@ -75,7 +75,9 @@ private:
 
 public:
     void addItem() {
-        string type, author, title;
+        string type;
+        string author;
+        string title;
         int year;
         bool available;
 
@@ -159,7 +161,7 @@ public:
         cout << "Item added successfully!" << endl;
     }
 
-    vector<Item> searchItems(bool isAvailable) {
+    vector<Item> searchItems(bool isAvailable) const {
         vector<Item> result;
         for (Item item : items) {
             if (item.getIsAvailable() == isAvailable) {
@@ -185,7 +187,6 @@ int main() {
         switch (choice) {
         case 1: {
             library.addItem();
-            cout << "Item added.\n";
             break;
         }
         case 2: {
@@ -232,7 +233,7 @@ int main() {
             cout << "Invalid choice.\n";
             break;
         }
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }
