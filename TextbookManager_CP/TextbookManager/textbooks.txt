@@ -1,0 +1,24 @@
+Title: Biology
+Author/s: Georgi Asparuhov
+Edition: 2
+ISBN: 55456
+Publication date: 12.03.2003
+Price: 24.55
+Circulation: 1500
+Is it approved: 1
+Title: Biology
+Author/s: Georgi Asparuhov
+Edition: 2
+ISBN: 55456
+Publication date: 12.03.2003
+Price: 24.55
+Circulation: 1500
+Is it approved: 1
+Title: Maths
+Author/s: Arhimed
+Edition: 1
+ISBN: 898922
+Publication date: 12.05.2006
+Price: 55
+Circulation: 1600
+Is it approved: 1
