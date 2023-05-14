@@ -38,3 +38,27 @@ Avarage speed: 945
 Minimum runway length: 12000
 Seat capacity: 853
 Tank capacity: 320000
+Plane ID: 2
+===============
+Class info: Manufacturer: Dadoo
+Model: 32333
+Avarage speed: 333
+Minimum runway length: 33
+Seat capacity: 33
+Tank capacity: 1.5e+06
+Plane ID: 1
+===============
+Class info: Manufacturer: Boeing
+Model: 747
+Avarage speed: 917
+Minimum runway length: 10500
+Seat capacity: 416
+Tank capacity: 216860
+Plane ID: 2
+===============
+Class info: Manufacturer: Airbus
+Model: A380
+Avarage speed: 945
+Minimum runway length: 12000
+Seat capacity: 853
+Tank capacity: 320000

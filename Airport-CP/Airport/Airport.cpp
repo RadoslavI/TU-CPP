@@ -98,14 +98,14 @@ public:
 class Plane {
 private:
     string id;
-    PlaneClass* pclass;
+    PlaneClass pclass;
 
 public:
     // Default constructor
-    Plane() {pclass = new PlaneClass(); }
+    Plane() {}
 
     // Parameterized constructor
-    Plane(string const& id, PlaneClass* pclass) {
+    Plane(string const& id, PlaneClass const& pclass) {
         this->id = id;
         this->pclass = pclass;
     }
@@ -115,7 +115,7 @@ public:
         return id;
     }
 
-    PlaneClass* getPlaneClass() const {
+    const PlaneClass& getPlaneClass() const {
         return pclass;
     }
 
@@ -124,7 +124,7 @@ public:
         this->id = id;
     }
 
-    void setPlaneClass(PlaneClass* pclass) {
+    void setPlaneClass(PlaneClass const& pclass) {
         this->pclass = pclass;
     }
 };
@@ -211,22 +211,22 @@ std::ostream& operator<<(std::ostream& os, const Plane& p)
     os << "Plane ID: ";
     os << p.getId() << endl;
     os << "===============" << endl;
-    PlaneClass const* pClass = p.getPlaneClass();
+    PlaneClass const& pClass = p.getPlaneClass();
 
     // Print out the plane class info
     os << "Class info: ";
-    os << "Manufacturer: " << pClass->getManufacturer() << endl;
-    os << "Model: " << pClass->getModel() << endl;
-    os << "Avarage speed: " << pClass->getAverageSpeed() << endl;
-    os << "Minimum runway length: " << pClass->getMinRunwayLength() << endl;
-    os << "Seat capacity: " << pClass->getSeats() << endl;
-    os << "Tank capacity: " << pClass->getTankCapacity() << endl;
+    os << "Manufacturer: " << pClass.getManufacturer() << endl;
+    os << "Model: " << pClass.getModel() << endl;
+    os << "Avarage speed: " << pClass.getAverageSpeed() << endl;
+    os << "Minimum runway length: " << pClass.getMinRunwayLength() << endl;
+    os << "Seat capacity: " << pClass.getSeats() << endl;
+    os << "Tank capacity: " << pClass.getTankCapacity() << endl;
 
     return os;
 }
 void SavePlane(const Plane& p){
     // Write data to a file
-    PlaneClass const* pClass = p.getPlaneClass();
+    PlaneClass const& pClass = p.getPlaneClass();
     std::ofstream file;
     file.open("plane.txt", std::ios_base::app);
     if (file.is_open()) {
@@ -235,12 +235,12 @@ void SavePlane(const Plane& p){
         file << "===============" << endl;
 
         file << "Class info: ";
-        file << "Manufacturer: " << pClass->getManufacturer() << endl;
-        file << "Model: " << pClass->getModel() << endl;
-        file << "Avarage speed: " << pClass->getAverageSpeed() << endl;
-        file << "Minimum runway length: " << pClass->getMinRunwayLength() << endl;
-        file << "Seat capacity: " << pClass->getSeats() << endl;
-        file << "Tank capacity: " << pClass->getTankCapacity() << endl;
+        file << "Manufacturer: " << pClass.getManufacturer() << endl;
+        file << "Model: " << pClass.getModel() << endl;
+        file << "Avarage speed: " << pClass.getAverageSpeed() << endl;
+        file << "Minimum runway length: " << pClass.getMinRunwayLength() << endl;
+        file << "Seat capacity: " << pClass.getSeats() << endl;
+        file << "Tank capacity: " << pClass.getTankCapacity() << endl;
 
         //Close the file
         file.close();
@@ -249,15 +249,15 @@ void SavePlane(const Plane& p){
 
 int main() {
     vector<PlaneClass> classes;
-    /*classes.emplace_back("Boeing", "747", 416, 10500, 216860, 917);
+    classes.emplace_back("Boeing", "747", 416, 10500, 216860, 917);
     classes.emplace_back("Airbus", "A380", 853, 12000, 320000, 945);
 
-    const PlaneClass* pclass1 = &classes[0];
-    const PlaneClass* pclass2 = &classes[1];*/
+    const PlaneClass pclass1 = classes[0];
+    const PlaneClass pclass2 = classes[1];
 
     vector<Plane> planes;
-    /*planes.emplace_back("1", pclass1);
-    planes.emplace_back("2", pclass2);*/
+    planes.emplace_back("1", pclass1);
+    planes.emplace_back("2", pclass2);
 
     vector<Flight> flights;
     flights.emplace_back("New York", 7500, 2.7, 5000);
@@ -313,10 +313,12 @@ int main() {
             PlaneClass currClass = PlaneClass(manufacturer, model, seats,
                 minRunwayLength, tankCapacity, averageSpeed);
             classes.emplace_back(currClass);
-            PlaneClass* classPTR = &currClass;
-            planes.emplace_back(id, classPTR);
+
+            Plane newPlane = Plane();
+            newPlane.setId(id);
+            newPlane.setPlaneClass(currClass);
+            planes.push_back(newPlane);
             cout << "Plane added successfully!" << endl;
-            cout << planes[planes.size() - 1];
             break;
         }
         case 3: {
@@ -401,7 +403,7 @@ int main() {
             }
             cout << "Planes with enough fuel to reach " << destination << ":" << endl;
             for (Plane plane : planes) {
-                if (currFlight.calculateMaxDistance(plane.getPlaneClass()->getTankCapacity()) >= 
+                if (currFlight.calculateMaxDistance(plane.getPlaneClass().getTankCapacity()) >= 
                     currFlight.getDistance()) {
                     cout << plane << endl;
                     SavePlane(plane);
