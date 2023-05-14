@@ -249,15 +249,15 @@ void SavePlane(const Plane& p){
 
 int main() {
     vector<PlaneClass> classes;
-    classes.emplace_back("Boeing", "747", 416, 10500, 216860, 917);
+    /*classes.emplace_back("Boeing", "747", 416, 10500, 216860, 917);
     classes.emplace_back("Airbus", "A380", 853, 12000, 320000, 945);
 
-    PlaneClass* pclass1 = &classes[0];
-    PlaneClass* pclass2 = &classes[1];
+    const PlaneClass* pclass1 = &classes[0];
+    const PlaneClass* pclass2 = &classes[1];*/
 
     vector<Plane> planes;
-    planes.emplace_back("1", pclass1);
-    planes.emplace_back("2", pclass2);
+    /*planes.emplace_back("1", pclass1);
+    planes.emplace_back("2", pclass2);*/
 
     vector<Flight> flights;
     flights.emplace_back("New York", 7500, 2.7, 5000);
@@ -310,11 +310,13 @@ int main() {
             cin >> tankCapacity;
             cout << "Average speed: ";
             cin >> averageSpeed;
-            auto currClass = PlaneClass(manufacturer, model, seats,
+            PlaneClass currClass = PlaneClass(manufacturer, model, seats,
                 minRunwayLength, tankCapacity, averageSpeed);
-            classes.push_back(currClass);
-            planes.emplace_back(id, &currClass);
+            classes.emplace_back(currClass);
+            PlaneClass* classPTR = &currClass;
+            planes.emplace_back(id, classPTR);
             cout << "Plane added successfully!" << endl;
+            cout << planes[planes.size() - 1];
             break;
         }
         case 3: {
